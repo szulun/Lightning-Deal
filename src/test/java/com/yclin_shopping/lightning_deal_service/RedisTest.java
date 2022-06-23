@@ -29,4 +29,15 @@ public class RedisTest {
         String value = redisService.getValue("stock:12");
         System.out.println(value);
     }
+
+    @Test
+    public void stockDeductTest() {
+        String stock;
+        stock = redisService.getValue("stock:12");
+        System.out.println("Before deduct: " + stock);
+        boolean result = redisService.stockDeductValidator("stock:12");
+        System.out.println("Result: " + result);
+        stock = redisService.getValue("stock:12");
+        System.out.println("After deduct: " + stock);
+    }
 }
