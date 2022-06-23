@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yclin_shopping.lightning_deal_service.db.dao.OrderDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillCommodityDao;
 import com.yclin_shopping.lightning_deal_service.db.po.Order;
@@ -35,6 +36,9 @@ public class SeckillActivityController {
 
     @Resource
     private SeckillActivityService seckillActivityService;
+
+    @Resource
+    private OrderDao orderDao;
     
     @RequestMapping("/addSeckillActivity")
     public String addSeckillActivity() {
@@ -128,6 +132,26 @@ public class SeckillActivityController {
         }
 
         modelAndView.setViewName("seckill_result");
+
+        return modelAndView;
+    }
+
+    @RequestMapping("/seckill/orderQuery/{orderNo}")
+    public ModelAndView orderQuery(
+            @PathVariable String orderNo
+    ) {
+        log.info("Query order ID: " + orderNo);
+        Order order = orderDao.queryOrder(orderNo);
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (order != null) {
+            modelAndView.setViewName("order");
+            modelAndView.addObject("order", order);
+            SeckillActivity seckillActivity = seckillActivityDao.querySeckillActivityById(order.getSeckillActivityId());
+            modelAndView.addObject("seckillActivity", seckillActivity);
+        } else {
+            modelAndView.setViewName("wait");
+        }
 
         return modelAndView;
     }
