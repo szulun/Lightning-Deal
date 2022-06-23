@@ -6,9 +6,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+@Slf4j
 @Service
 public class RedisService {
     
@@ -58,6 +60,26 @@ public class RedisService {
     public void revertStock(String key) {
         Jedis jedisClient = jedisPool.getResource();
         jedisClient.incr(key);
+        jedisClient.close();
+    }
+
+    public boolean isInLimitMember(long seckillActivityId, long userId) {
+        Jedis jedisClient = jedisPool.getResource();
+        boolean sismember = jedisClient.sismember("seckillActivity_users:" + seckillActivityId, String.valueOf(userId));
+        jedisClient.close();
+        log.info("userId: {}, activityId: {}, has purchased: {}", seckillActivityId, userId, sismember);
+        return sismember;
+    }
+
+    public void addLimitMember(long seckillActivityId, long userId) {
+        Jedis jedisClient = jedisPool.getResource();
+        jedisClient.sadd("seckillActivity_users:" + seckillActivityId, String.valueOf(userId));
+        jedisClient.close();
+    }
+
+    public void removeLimitMember(Long seckillActivityId, Long userId) {
+        Jedis jedisClient = jedisPool.getResource();
+        jedisClient.srem("seckillActivity_users:" + seckillActivityId, String.valueOf(userId));
         jedisClient.close();
     }
 }

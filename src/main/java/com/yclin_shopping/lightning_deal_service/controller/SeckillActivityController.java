@@ -21,6 +21,7 @@ import com.yclin_shopping.lightning_deal_service.db.po.Order;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillActivity;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillCommodity;
 import com.yclin_shopping.lightning_deal_service.service.SeckillActivityService;
+import com.yclin_shopping.lightning_deal_service.util.RedisService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,9 @@ public class SeckillActivityController {
 
     @Resource
     private OrderDao orderDao;
+
+    @Resource
+    private RedisService redisService;
     
     @RequestMapping("/addSeckillActivity")
     public String addSeckillActivity() {
@@ -110,11 +114,11 @@ public class SeckillActivityController {
 
         try {
             // check whether the user has purchased the item
-            // if (redisService.isInLimitMember(seckillActivityId, userId)) {
-            //     modelAndView.addObject("resultInfo", "Sorry, you have purchased this item.");
-            //     modelAndView.setViewName("seckill_result");
-            //     return modelAndView;
-            // }
+            if (redisService.isInLimitMember(seckillActivityId, userId)) {
+                modelAndView.addObject("resultInfo", "Sorry, you have purchased this item.");
+                modelAndView.setViewName("seckill_result");
+                return modelAndView;
+            }
 
             stockValidateResult = seckillActivityService.seckillStockValidator(seckillActivityId);
             if (stockValidateResult) {
@@ -122,7 +126,7 @@ public class SeckillActivityController {
                 modelAndView.addObject("resultInfo", "Success lightning deal, order is creating, ID: " + order.getOrderNo());
                 modelAndView.addObject("orderNo", order.getOrderNo());
                 // add the user to the purchased list
-                // redisService.addLimitMember(seckillActivityId, userId);
+                redisService.addLimitMember(seckillActivityId, userId);
             } else {
                 modelAndView.addObject("resultInfo", "Sorry, the stock is not enough.");
             }

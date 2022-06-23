@@ -65,7 +65,7 @@ public class SeckillActivityService {
         return order;
     }
 
-    public void payOrderProcess(String orderNo) {
+    public void payOrderProcess(String orderNo) throws Exception {
         log.info("Complete order payment: " + orderNo);
         Order order = orderDao.queryOrder(orderNo);
 
@@ -77,14 +77,11 @@ public class SeckillActivityService {
             return;
         }
 
-        boolean deductStockResult = seckillActivityDao.deductStock(order.getSeckillActivityId());
-        if (deductStockResult) {
-            order.setPayTime(new Date());
-            // 0: invalid order, 1: order created, waiting for payment, 2: payment completed
-            order.setOrderStatus(2);
-            orderDao.updateOrder(order);
-        }
-
-        // rocketMQService.sendMessage("pay_done", JSON.toJSONString(order));
+        order.setPayTime(new Date());
+        // 0: invalid order, 1: order created, waiting for payment, 2: payment completed
+        order.setOrderStatus(2);
+        orderDao.updateOrder(order);
+        
+        rocketMQService.sendMessage("pay_done", JSON.toJSONString(order));
     }
 }
