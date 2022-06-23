@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.yclin_shopping.lightning_deal_service.service.SeckillActivityService;
 import com.yclin_shopping.lightning_deal_service.util.RedisService;
 
 @SpringBootTest
@@ -12,6 +13,9 @@ public class RedisTest {
     
     @Resource
     private RedisService redisService;
+
+    @Resource
+    private SeckillActivityService seckillActivityService;
 
     @Test
     public void stockTest() {
@@ -39,5 +43,10 @@ public class RedisTest {
         System.out.println("Result: " + result);
         stock = redisService.getValue("stock:12");
         System.out.println("After deduct: " + stock);
+    }
+
+    @Test
+    public void pushSeckillInfoToRedisTest() {
+        seckillActivityService.pushSeckillInfoToRedis(19);
     }
 }

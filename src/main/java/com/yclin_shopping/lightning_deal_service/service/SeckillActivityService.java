@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.yclin_shopping.lightning_deal_service.db.dao.OrderDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
+import com.yclin_shopping.lightning_deal_service.db.dao.SeckillCommodityDao;
 import com.yclin_shopping.lightning_deal_service.db.po.Order;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillActivity;
+import com.yclin_shopping.lightning_deal_service.db.po.SeckillCommodity;
 import com.yclin_shopping.lightning_deal_service.mq.RocketMQService;
 import com.yclin_shopping.lightning_deal_service.util.RedisService;
 import com.yclin_shopping.lightning_deal_service.util.SnowFlake;
@@ -32,6 +34,9 @@ public class SeckillActivityService {
 
     @Resource
     private OrderDao orderDao;
+
+    @Resource
+    private SeckillCommodityDao seckillCommodityDao;
 
     /**
     * datacenterId; 数据中心
@@ -83,5 +88,13 @@ public class SeckillActivityService {
         orderDao.updateOrder(order);
         
         rocketMQService.sendMessage("pay_done", JSON.toJSONString(order));
+    }
+
+    public void pushSeckillInfoToRedis(long seckillActivityId) {
+        SeckillActivity seckillActivity = seckillActivityDao.querySeckillActivityById(seckillActivityId);
+        redisService.setValue("seckillActivity:" + seckillActivityId, JSON.toJSONString(seckillActivity));
+
+        SeckillCommodity seckillCommodity = seckillCommodityDao.querySeckillCommodityById(seckillActivity.getCommodityId());
+        redisService.setValue("seckillCommodity:" + seckillActivity.getCommodityId(), JSON.toJSONString(seckillCommodity));
     }
 }

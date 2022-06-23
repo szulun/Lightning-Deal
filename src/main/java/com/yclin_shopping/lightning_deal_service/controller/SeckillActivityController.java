@@ -8,12 +8,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.yclin_shopping.lightning_deal_service.db.dao.OrderDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillCommodityDao;
@@ -91,8 +93,24 @@ public class SeckillActivityController {
             @PathVariable("seckillActivityId") long seckillActivityId,
             Map<String,Object> resultMap
     ) {
-        SeckillActivity seckillActivity = seckillActivityDao.querySeckillActivityById(seckillActivityId);
-        SeckillCommodity seckillCommodity = seckillCommodityDao.querySeckillCommodityById(seckillActivity.getCommodityId());
+        SeckillActivity seckillActivity;
+        SeckillCommodity seckillCommodity;
+
+        String seckillActivityInfo = redisService.getValue("seckillActivity:" + seckillActivityId);
+        if (StringUtils.isNotEmpty(seckillActivityInfo)) {
+            log.info("Data caching in Redis: " + seckillActivityInfo);
+            seckillActivity = JSON.parseObject(seckillActivityInfo, SeckillActivity.class);
+        } else {
+            seckillActivity = seckillActivityDao.querySeckillActivityById(seckillActivityId);
+        }
+
+        String seckillCommodityInfo = redisService.getValue("seckillCommodity:" + seckillActivity.getCommodityId());
+        if (StringUtils.isNotEmpty(seckillCommodityInfo)) {
+            log.info("Data caching in Redis: " + seckillCommodityInfo);
+            seckillCommodity = JSON.parseObject(seckillCommodityInfo, SeckillCommodity.class);
+        } else {
+            seckillCommodity = seckillCommodityDao.querySeckillCommodityById(seckillActivity.getCommodityId());
+        }
 
         resultMap.put("seckillActivity", seckillActivity);
         resultMap.put("seckillCommodity", seckillCommodity);
