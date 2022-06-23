@@ -16,5 +16,5 @@ public interface SeckillActivityDao {
 
     boolean deductStock(Long seckillActivityId);
 
-    // void revertStock(Long seckillActivityId);
+    void revertStock(Long seckillActivityId);
 }
