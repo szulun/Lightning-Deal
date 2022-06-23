@@ -1,5 +1,7 @@
 package com.yclin_shopping.lightning_deal_service;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Test;
@@ -48,5 +50,14 @@ public class RedisTest {
     @Test
     public void pushSeckillInfoToRedisTest() {
         seckillActivityService.pushSeckillInfoToRedis(19);
+    }
+
+    @Test
+    public void testConcurrentAddLock() {
+        for (int i = 0; i < 10; i++) {
+            String requestId = UUID.randomUUID().toString();
+            System.out.println(redisService.tryGetDistributedLock("A", requestId, 1000));
+            redisService.releaseDistributedLock("A", requestId);
+        }
     }
 }
