@@ -12,12 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillCommodityDao;
+import com.yclin_shopping.lightning_deal_service.db.po.Order;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillActivity;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillCommodity;
+import com.yclin_shopping.lightning_deal_service.service.SeckillActivityService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class SeckillActivityController {
 
@@ -26,6 +32,9 @@ public class SeckillActivityController {
 
     @Resource
     private SeckillCommodityDao seckillCommodityDao;
+
+    @Resource
+    private SeckillActivityService seckillActivityService;
     
     @RequestMapping("/addSeckillActivity")
     public String addSeckillActivity() {
@@ -85,5 +94,41 @@ public class SeckillActivityController {
         resultMap.put("commodityName", seckillCommodity.getCommodityName());
         resultMap.put("commodityDesc", seckillCommodity.getCommodityDesc());
         return "seckill_item";
+    }
+
+    @RequestMapping("/seckill/buy/{userId}/{seckillActivityId}")
+    public ModelAndView seckillCommodity(
+            @PathVariable long userId,
+            @PathVariable long seckillActivityId
+    ) {
+        boolean stockValidateResult = false;
+        ModelAndView modelAndView = new ModelAndView();
+
+        try {
+            // check whether the user has purchased the item
+            // if (redisService.isInLimitMember(seckillActivityId, userId)) {
+            //     modelAndView.addObject("resultInfo", "Sorry, you have purchased this item.");
+            //     modelAndView.setViewName("seckill_result");
+            //     return modelAndView;
+            // }
+
+            stockValidateResult = seckillActivityService.seckillStockValidator(seckillActivityId);
+            if (stockValidateResult) {
+                Order order = seckillActivityService.createOrder(seckillActivityId, userId);
+                modelAndView.addObject("resultInfo", "Success lightning deal, order is creating, ID: " + order.getOrderNo());
+                modelAndView.addObject("orderNo", order.getOrderNo());
+                // add the user to the purchased list
+                // redisService.addLimitMember(seckillActivityId, userId);
+            } else {
+                modelAndView.addObject("resultInfo", "Sorry, the stock is not enough.");
+            }
+        } catch (Exception exception) {
+            log.error("An anomaly occurred: ", exception.toString());
+            modelAndView.addObject("resultInfo", "The lightning deal is failed.");
+        }
+
+        modelAndView.setViewName("seckill_result");
+
+        return modelAndView;
     }
 }
