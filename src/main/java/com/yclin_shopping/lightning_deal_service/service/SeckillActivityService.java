@@ -1,10 +1,13 @@
 package com.yclin_shopping.lightning_deal_service.service;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.yclin_shopping.lightning_deal_service.db.dao.OrderDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
 import com.yclin_shopping.lightning_deal_service.db.po.Order;
 import com.yclin_shopping.lightning_deal_service.db.po.SeckillActivity;
@@ -12,6 +15,9 @@ import com.yclin_shopping.lightning_deal_service.mq.RocketMQService;
 import com.yclin_shopping.lightning_deal_service.util.RedisService;
 import com.yclin_shopping.lightning_deal_service.util.SnowFlake;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class SeckillActivityService {
     
@@ -23,6 +29,9 @@ public class SeckillActivityService {
 
     @Resource
     private RocketMQService rocketMQService;
+
+    @Resource
+    private OrderDao orderDao;
 
     /**
     * datacenterId; 数据中心
@@ -54,5 +63,28 @@ public class SeckillActivityService {
         // rocketMQService.sendDelayMessage("pay_check", JSON.toJSONString(order), 5);
 
         return order;
+    }
+
+    public void payOrderProcess(String orderNo) {
+        log.info("Complete order payment: " + orderNo);
+        Order order = orderDao.queryOrder(orderNo);
+
+        if (order == null) {
+            log.error("The order dose not exist: " + orderNo);
+            return;
+        } else if (order.getOrderStatus() != 1) {
+            log.error("Invalid order: " + orderNo);
+            return;
+        }
+
+        boolean deductStockResult = seckillActivityDao.deductStock(order.getSeckillActivityId());
+        if (deductStockResult) {
+            order.setPayTime(new Date());
+            // 0: invalid order, 1: order created, waiting for payment, 2: payment completed
+            order.setOrderStatus(2);
+            orderDao.updateOrder(order);
+        }
+
+        // rocketMQService.sendMessage("pay_done", JSON.toJSONString(order));
     }
 }
