@@ -3,10 +3,12 @@ package com.yclin_shopping.lightning_deal_service.controller;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.slots.block.RuleConstant;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.alibaba.fastjson.JSON;
 import com.yclin_shopping.lightning_deal_service.db.dao.OrderDao;
 import com.yclin_shopping.lightning_deal_service.db.dao.SeckillActivityDao;
@@ -47,6 +55,20 @@ public class SeckillActivityController {
 
     @Resource
     private RedisService redisService;
+
+    @PostConstruct
+    public void initFlowRules() {
+        List<FlowRule> rules = new ArrayList<>();
+        
+        FlowRule rule = new FlowRule();
+        rule.setResource("seckills");
+        rule.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        rule.setCount(2);
+
+        rules.add(rule);
+        FlowRuleManager.loadRules(rules);
+    }
+
     
     @RequestMapping("/addSeckillActivity")
     public String addSeckillActivity() {
@@ -85,9 +107,14 @@ public class SeckillActivityController {
 
     @RequestMapping("/seckills")
     public String activityList(Map<String, Object> resultMap) {
-        List<SeckillActivity> seckillActivities = seckillActivityDao.querySeckillActivitysByStatus(1);
-        resultMap.put("seckillActivities", seckillActivities);
-        return "seckill_activity";
+        try (Entry entry = SphU.entry("seckills")) {
+            List<SeckillActivity> seckillActivities = seckillActivityDao.querySeckillActivitysByStatus(1);
+            resultMap.put("seckillActivities", seckillActivities);
+            return "seckill_activity";
+        } catch (BlockException ex) {
+            log.error("Querying is limited. " + ex.toString());
+            return "wait";
+        }
     }
 
     @RequestMapping("/item/{seckillActivityId}")
