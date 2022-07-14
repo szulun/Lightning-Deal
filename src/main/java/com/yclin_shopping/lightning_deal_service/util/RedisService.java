@@ -67,7 +67,7 @@ public class RedisService {
         Jedis jedisClient = jedisPool.getResource();
         boolean sismember = jedisClient.sismember("seckillActivity_users:" + seckillActivityId, String.valueOf(userId));
         jedisClient.close();
-        log.info("userId: {}, activityId: {}, has purchased: {}", seckillActivityId, userId, sismember);
+        log.info("userId: {}, activityId: {}, has purchased: {}", userId, seckillActivityId, sismember);
         return sismember;
     }
 
