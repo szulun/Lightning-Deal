@@ -4,10 +4,10 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-	<title>九章秒杀-正品秒杀！</title>
+	<title>秒殺活動列表</title>
 	<link rel="icon" href="img/jiuzhanglogo.png">
 
-	<!-- 引入样式 -->
+	<!-- 引入樣式 -->
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
 	<link rel="stylesheet" type="text/css" href="css/all.css" />
@@ -18,32 +18,25 @@
 </head>
 
 <body>
-	<!-- 头部栏位 -->
-	<!--页面顶部-->
+	<!-- 頭部欄位 -->
+	<!--頁面頂部-->
 	<div id="nav-bottom">
-		<!--顶部-->
+		<!--頂部-->
 		<div class="nav-top">
 			<div class="top">
 				<div class="py-container">
 					<div class="shortcut">
 						<ul class="fl">
-							<li class="f-item">九章欢迎您！</li>
-							<li class="f-item">请
-								<a href="login.html" target="_blank">登录</a>
-								<span>
-									<a href="register.html" target="_blank">免费注册</a>
-								</span>
-							</li>
+							<li class="f-item">九章歡迎您！</li>
+							<li class="f-item">請<a href="login.html" target="_blank">登錄</a>　<span><a href="register.html" target="_blank">免費註冊</a></span></li>
 						</ul>
 						<div class="fr typelist">
 							<ul class="types">
-								<li class="f-item">
-									<span>我的订单</span>
-								</li>
+								<li class="f-item"><span>我的訂單</span></li>
 
 								<li class="f-item">
 									<span>
-										<a href="cart.html" target="_blank">我的购物车</a>
+										<a href="cart.html" target="_blank">我的購物車</a>
 									</span>
 								</li>
 								<li class="f-item">
@@ -52,26 +45,15 @@
 									</span>
 								</li>
 								<li class="f-item">
-									<span>九章会员</span>
+									<span>九章會員</span>
 								</li>
+								<li class="f-item"><span>企業採購</span></li>
 								<li class="f-item">
-									<span>企业采购</span>
+									<span>關注九章</span>
 								</li>
-								<li class="f-item">
-									<span>关注九章</span>
-								</li>
-								<li class="f-item">
-									<span>
-										<a href="cooperation.html" target="_blank">合作招商</a>
-									</span>
-								</li>
-								<li class="f-item">
-									<span>
-										<a href="shoplogin.html" target="_blank">商家后台</a>
-									</span>
-								</li>
-								<li class="f-item">
-									<span>网站导航</li>
+								<li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
+								<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家後台</a></span></li>
+								<li class="f-item"><span>網站導航</li>
 							</ul>
 						</div>
 
@@ -79,7 +61,7 @@
 				</div>
 			</div>
 
-			<!--头部-->
+			<!--頭部-->
 			<div class="header">
 				<div class="py-container">
 					<div class="yui3-g Logo">
@@ -111,42 +93,43 @@
 		<div class="banner">
 			<img src="img/_/banner.png" class="img-responsive" alt="">
 		</div>
-		<!--秒杀时间-->
+		<!--秒殺時間-->
 		<div class="sectime">
 			<div class="item-time active">
 				<div class="time-clock">12:00</div>
 				<div class="time-state-on">
-					<span class="on-text">快抢中</span>
-					<span class="on-over">距离结束：01:02:34</span>
+					<span class="on-text">快搶中</span>
+					<span class="on-over">距離結束：01:02:34</span>
 				</div>
 			</div>
 			<div class="item-time">
 				<div class="time-clock">14:00</div>
 				<div class="time-state-will">
-					<span>即将开始</span>
+					<span>即將開始</span>
 				</div>
 			</div>
 			<div class="item-time">
 				<div class="time-clock">16:00</div>
 				<div class="time-state-will">
-					<span>即将开始</span>
+					<span>即將開始</span>
 				</div>
 			</div>
 			<div class="item-time">
 				<div class="time-clock">18:00</div>
 				<div class="time-state-will">
-					<span>即将开始</span>
+					<span>即將開始</span>
 				</div>
 			</div>
 			<div class="item-time">
 				<div class="time-clock">20:00</div>
 				<div class="time-state-will">
-					<span>即将开始</span>
+					<span>即將開始</span>
 				</div>
 			</div>
 		</div>
-		<!--秒杀活动列表列表-->
+		<!--秒殺活動列表-->
 		<div class="goods-list" id="app">
+			<h4 class="tit-txt">秒殺活動列表</h4>
 			<ul class="seckill" id="seckill">
 				<tr th:each="seckillActivity : ${seckillActivities}">
 					<li class="seckill-item" >
@@ -154,7 +137,7 @@
 							<img src="img/_/list.jpg" alt=''>
 						</div>
 						<div class="intro">
-							<span th:text="${seckillActivity.name}">活动名称</span>
+							<span th:text="${seckillActivity.name}">活動名稱</span>
 						</div>
 						<div class='price'>
 							<b class='sec-price' th:text="'￥'+${seckillActivity.seckillPrice}"></b>
@@ -167,10 +150,10 @@
 									<span style='width: 70%;' class='bar'></span>
 								</div>
 							</div>
-							<div>剩余
+							<div>剩餘
 								<b class='owned'>999</b>件</div>
 						</div>
-						<a class='sui-btn btn-block btn-buy'  th:href="@{'/item/'+${seckillActivity.id}}" target='_blank'>立即抢购</a>
+						<a class='sui-btn btn-block btn-buy'  th:href="@{'/item/'+${seckillActivity.id}}" target='_blank'>立即搶購</a>
 					</li>
 				</tr>
 			</ul>
@@ -192,10 +175,10 @@
 		</div>
 	</div>
 
-	<!--回到顶部-->
+	<!--回到頂部-->
 
-	<!-- 底部栏位 -->
-	<!--页面底部-->
+	<!-- 底部欄位 -->
+	<!--頁面底部-->
 	<div class="clearfix footer">
 		<div class="py-container">
 			<div class="footlink">
@@ -206,7 +189,7 @@
 							<i class="serivce-item fl"></i>
 							<div class="service-text">
 								<h4>正品保障</h4>
-								<p>正品保障，提供发票</p>
+								<p>正品保障，提供發票</p>
 							</div>
 
 						</li>
@@ -215,7 +198,7 @@
 							<i class="serivce-item fl"></i>
 							<div class="service-text">
 								<h4>正品保障</h4>
-								<p>正品保障，提供发票</p>
+								<p>正品保障，提供發票</p>
 							</div>
 
 						</li>
@@ -224,7 +207,7 @@
 							<i class="serivce-item fl"></i>
 							<div class="service-text">
 								<h4>正品保障</h4>
-								<p>正品保障，提供发票</p>
+								<p>正品保障，提供發票</p>
 							</div>
 
 						</li>
@@ -233,7 +216,7 @@
 							<i class="serivce-item fl"></i>
 							<div class="service-text">
 								<h4>正品保障</h4>
-								<p>正品保障，提供发票</p>
+								<p>正品保障，提供發票</p>
 							</div>
 
 						</li>
@@ -242,7 +225,7 @@
 							<i class="serivce-item fl"></i>
 							<div class="service-text">
 								<h4>正品保障</h4>
-								<p>正品保障，提供发票</p>
+								<p>正品保障，提供發票</p>
 							</div>
 
 						</li>
@@ -251,101 +234,101 @@
 				<div class="clearfix Mod-list">
 					<div class="yui3-g">
 						<div class="yui3-u-1-6">
-							<h4>购物指南</h4>
+							<h4>購物指南</h4>
 							<ul class="unstyled">
-								<li>购物流程</li>
-								<li>会员介绍</li>
-								<li>生活旅行/团购</li>
-								<li>常见问题</li>
-								<li>购物指南</li>
+								<li>購物流程</li>
+								<li>會員介紹</li>
+								<li>生活旅行/團購</li>
+								<li>常見問題</li>
+								<li>購物指南</li>
 							</ul>
 
 						</div>
 						<div class="yui3-u-1-6">
 							<h4>配送方式</h4>
 							<ul class="unstyled">
-								<li>上门自提</li>
-								<li>211限时达</li>
-								<li>配送服务查询</li>
-								<li>配送费收取标准</li>
+								<li>上門自提</li>
+								<li>211限時達</li>
+								<li>配送服務查詢</li>
+								<li>配送費收取標準</li>
 								<li>海外配送</li>
 							</ul>
 						</div>
 						<div class="yui3-u-1-6">
 							<h4>支付方式</h4>
 							<ul class="unstyled">
-								<li>货到付款</li>
-								<li>在线支付</li>
+								<li>貨到付款</li>
+								<li>線上支付</li>
 								<li>分期付款</li>
-								<li>邮局汇款</li>
-								<li>公司转账</li>
+								<li>郵局匯款</li>
+								<li>公司轉帳</li>
 							</ul>
 						</div>
 						<div class="yui3-u-1-6">
-							<h4>售后服务</h4>
+							<h4>售後服務</h4>
 							<ul class="unstyled">
-								<li>售后政策</li>
-								<li>价格保护</li>
-								<li>退款说明</li>
-								<li>返修/退换货</li>
-								<li>取消订单</li>
+								<li>售後政策</li>
+								<li>價格保護</li>
+								<li>退款說明</li>
+								<li>返修/退換貨</li>
+								<li>取消訂單</li>
 							</ul>
 						</div>
 						<div class="yui3-u-1-6">
-							<h4>特色服务</h4>
+							<h4>特色服務</h4>
 							<ul class="unstyled">
-								<li>夺宝岛</li>
-								<li>DIY装机</li>
-								<li>延保服务</li>
-								<li>品优购E卡</li>
-								<li>品优购通信</li>
+								<li>奪寶島</li>
+								<li>DIY裝機</li>
+								<li>延保服務</li>
+								<li>品優購E卡</li>
+								<li>品優購通信</li>
 							</ul>
 						</div>
 						<div class="yui3-u-1-6">
-							<h4>帮助中心</h4>
+							<h4>幫助中心</h4>
 							<img src="img/erwei_jz.png">
 						</div>
 					</div>
 				</div>
 				<div class="Mod-copyright">
 					<ul class="helpLink">
-						<li>关于我们
+						<li>關於我們
 							<span class="space"></span>
 						</li>
-						<li>联系我们
+						<li>聯繫我們
 							<span class="space"></span>
 						</li>
-						<li>关于我们
+						<li>關於我們
 							<span class="space"></span>
 						</li>
-						<li>商家入驻
+						<li>商家入駐
 							<span class="space"></span>
 						</li>
-						<li>营销中心
+						<li>行銷中心
 							<span class="space"></span>
 						</li>
-						<li>友情链接
+						<li>友情連結
 							<span class="space"></span>
 						</li>
-						<li>关于我们
+						<li>關於我們
 							<span class="space"></span>
 						</li>
-						<li>营销中心
+						<li>行銷中心
 							<span class="space"></span>
 						</li>
-						<li>友情链接
+						<li>友情連結
 							<span class="space"></span>
 						</li>
-						<li>关于我们</li>
+						<li>關於我們</li>
 					</ul>
-					<p>2013-2020 九章算法  浙ICP备19045946号-1</p>
-					<p>商务合作: fukesu@jiuzhang.com</p>
+					<p>2013-2020 九章算法  浙ICP備19045946號-1</p>
+					<p>商務合作: fukesu@jiuzhang.com</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--页面底部END-->
-	<!-- 引入组件库 -->
+	<!--頁面底部END-->
+	<!-- 引入組件庫 -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.8/dist/vue.js"></script>
 	<script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>
 	<script>

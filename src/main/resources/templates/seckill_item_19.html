@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
 	<meta charset="utf-8" />
@@ -84,7 +84,7 @@
 					<li>
 						<a href="#">Apple蘋果</a>
 					</li>
-					<li class="active">iphone 6S系列</li>
+					<li class="active">iphone 6S系類</li>
 				</ul>
 			</div>
 			<!--product-info-->
@@ -122,7 +122,7 @@
 				</div>
 				<div class="fr itemInfo-wrap">
 					<div class="sku-name">
-						<h4 th:text="${seckillCommodity.commodityName}"></h4>
+						<h4>iPhone17 Pro</h4>
 					</div>
 					<div class="news">
 						<span><img src="/img/_/clock.png"/>九章秒殺</span>
@@ -136,7 +136,7 @@
 							</div>
 							<div class="fl price">
 								<i>¥</i>
-								<em th:text="'￥'+${seckillActivity.seckillPrice}"></em>
+								<em>￥5888.00</em>
 								<span>降價通知</span>
 							</div>
 							<div class="fr remark">
@@ -211,7 +211,7 @@
 										<i>購買方式</i>
 									</div>
 								</dt>
-								<dd><a href="javascript:;" class="selected">官方標配<span title="點擊取消選擇">&nbsp;</span>
+								<dd><a href="javascript:;" class="selected">官方标配<span title="點擊取消選擇">&nbsp;</span>
 </a></dd>
 								<dd><a href="javascript:;">移動優惠版</a></dd>
 								<dd><a href="javascript:;" class="locked">電信優惠版</a></dd>
@@ -245,7 +245,7 @@
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a th:href="'/seckill/buy/1234/' + ${seckillActivity.id}" target="_blank"
+										<a href="/seckill/buy/1234/19" target="_blank"
 										   class="addshopcar">立即購買</a>
 									</li>
 								</ul>
@@ -470,7 +470,7 @@
 						<div class="clearfix"></div>
 						<div class="tab-content tab-wraped">
 							<div id="one" class="tab-pane active">
-								<ul class="goods-intro unstyled" th:text="${seckillCommodity.commodityDesc}"></ul>
+								<ul class="goods-intro unstyled">iPhone17 Pro 非常好</ul>
 								<ul class="goods-intro unstyled">
 									<li>分辨率：1920*1080(FHD)</li>
 									<li>後置攝像頭：1200萬像素</li>
